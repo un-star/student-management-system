@@ -41,3 +41,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+from ..auth import get_current_user
+from .. import models
+
+@router.get("/me", response_model=schemas.UserResponse)
+def read_current_user(current_user: models.User = Depends(get_current_user)):
+    return current_user

@@ -7,6 +7,17 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Student CRUD API")
 
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5174"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(students.router)
 app.include_router(auth.router)
 
@@ -14,6 +25,7 @@ app.include_router(auth.router)
 @app.get("/")
 def home():
     return {"message": "Student CRUD API is running"}
+
 
 
 # from fastapi import FastAPI,Depends
