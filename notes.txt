@@ -1,0 +1,105 @@
+api is a way for applications to communicate
+
+rest api is a web api that uses urls,http methods and json
+
+get is used to read data
+
+post is used to create new data
+
+put is used to update existing data
+
+delete removes the data
+
+
+
+postsql
+
+create table students(
+    id Serial PRIMARY KEY,
+    name VARCHAR(100),
+    age INTEGER
+)
+
+INSERT INTO students (name,age)
+VALUES('alice',20)
+
+
+object relational mapping 
+an orm lets you work with a database using python objects instead of writing sql for every operation 
+
+SELECT * FROM user;   sql
+cursor.execute("SELECT * FROM users") python
+
+
+
+interact with python classes and objects representing tables
+user=session.query(User).all()
+
+from sqlalchemy import select
+user=session.scalars(select(User)).all()
+
+an orm lets you work with a database using python objects instead of writing sql for every operation 
+
+sqlalchemy is the most widely used orm(object relational mapping) and sql toolkit for python
+it helps you:
+connect to databases
+define tables as python classes
+insert,update,delete,and query records
+manage database sessions
+
+from sqlalchemy.orm import DeclarativeBase,Mapped,mapped_column
+class Base(DeclarativeBase):
+pass
+
+class User(Base):
+ __tablename__="users"
+ id: Mapped[int]= mapped_column(primary_key=True)
+ name:Mapped[str]
+
+
+database driver
+software that allows your python application to communicate with a specific database
+
+fastapi- sqlalchemy- database driver(psycopg2-binary)- postgresql
+
+sqlalchemy know what query to execute while the driver knows how to send it to postgresql
+
+psycopg2-binary is a postgresql database driver for python
+it allows python applications to connect to postgresql databases
+
+new_user=User(name='alice')
+session.add(new_user)
+session.commit()
+
+
+
+Engine: The application's interface to the database; manages connection pooling.
+Connection: The actual channel used to communicate with the database.
+Session: The object you use in your code to query, insert, update, and delete data while managing transactions.
+
+
+#  FastAPI Request
+#        │
+#        ▼
+#   Depends(get_db)
+#        │
+#        ▼
+#     Session
+#        │
+#        ▼
+#     Engine
+#        │
+#        ▼
+#    Connection
+#        │
+#        ▼
+#    PostgreSQL
+
+
+
+postgres == admin super user
+student_db == database
+student == table
+
+to tell PostgreSQL that you are the user postgres and you want to open the database student_db, you must use both the -U (User) flag and the -d (Database) 
+psql -U postgres -d student_db
