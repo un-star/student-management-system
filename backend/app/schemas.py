@@ -67,3 +67,59 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     email:str|None=None
     role:str|None=None
+
+
+from datetime import date as date_type
+
+
+# --- Attendance schemas ---
+
+class AttendanceCreate(BaseModel):
+    student_id: int
+    date: date_type
+    status: str = Field(..., pattern="^(Present|Absent)$")
+
+
+class AttendanceUpdate(BaseModel):
+    status: str = Field(..., pattern="^(Present|Absent)$")
+
+
+class AttendanceResponse(BaseModel):
+    id: int
+    student_id: int
+    date: date_type
+    status: str
+
+    class Config:
+        from_attributes = True
+
+
+# --- Marks schemas ---
+
+class MarksCreate(BaseModel):
+    student_id: int
+    subject: str = Field(..., min_length=1, max_length=50)
+    marks: int = Field(..., ge=0, le=100)
+
+
+class MarksUpdate(BaseModel):
+    marks: int = Field(..., ge=0, le=100)
+
+
+class MarksResponse(BaseModel):
+    id: int
+    student_id: int
+    subject: str
+    marks: int
+
+    class Config:
+        from_attributes = True
+
+
+# --- Dashboard schema ---
+
+class DashboardStats(BaseModel):
+    total_students: int
+    present_today: int
+    absent_today: int
+    average_marks: float

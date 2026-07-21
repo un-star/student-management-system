@@ -21,6 +21,10 @@ export default function Sidebar() {
         <NavLink to="/students" className={linkClass}>Students</NavLink>
       </nav>
 
+      <NavLink to="/attendance" className={linkClass}>Attendance</NavLink>
+<NavLink to="/marks" className={linkClass}>Marks</NavLink>
+
+
       <button
         onClick={logout}
         className="mx-4 mt-8 text-left text-danger/90 hover:text-danger text-sm font-medium"

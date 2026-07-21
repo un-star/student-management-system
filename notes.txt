@@ -97,6 +97,39 @@ Session: The object you use in your code to query, insert, update, and delete da
 
 
 
+when a student is deleted, their attendance and marks records get deleted too. Update models.py:
+
+python
+class Attendance(Base):
+    __tablename__ = "attendance"
+    __table_args__ = (UniqueConstraint("student_id", "date", name="unique_student_date"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    student_id: Mapped[int] = mapped_column(ForeignKey("students.id", ondelete="CASCADE"))
+    date: Mapped[date_type] = mapped_column(Date)
+    status: Mapped[str] = mapped_column(String(10))
+
+
+class Marks(Base):
+    __tablename__ = "marks"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    student_id: Mapped[int] = mapped_column(ForeignKey("students.id", ondelete="CASCADE"))
+    subject: Mapped[str] = mapped_column(String(50))
+    marks: Mapped[int] = mapped_column(Integer)
+
+Since Base.metadata.create_all() won't alter existing tables, you'll need to either drop and recreate the tables (fine if this is just test data) or run a migration. For a quick dev fix:
+
+sql
+ALTER TABLE attendance DROP CONSTRAINT attendance_student_id_fkey;
+ALTER TABLE attendance ADD CONSTRAINT attendance_student_id_fkey
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
+
+ALTER TABLE marks DROP CONSTRAINT marks_student_id_fkey;
+ALTER TABLE marks ADD CONSTRAINT marks_student_id_fkey
+  FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE;
+
+
 postgres == admin super user
 student_db == database
 student == table

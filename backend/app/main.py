@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from . import models      
 from .database import Base, engine
-from .routers import students,auth
-
+from .routers import students, auth, marks, dashboard
+from .routers import attendance
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Student CRUD API")
@@ -20,6 +20,9 @@ app.add_middleware(
 
 app.include_router(students.router)
 app.include_router(auth.router)
+app.include_router(attendance.router)
+app.include_router(marks.router)
+app.include_router(dashboard.router)
 
 
 @app.get("/")
