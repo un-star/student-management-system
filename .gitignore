@@ -1,9 +1,0 @@
-__pycache__/
-*.pyc
-.venv/
-frontend/node_modules/
-frontend/dist/
-backend/student.db
-backend/*.txt
-.env
-.env.*
