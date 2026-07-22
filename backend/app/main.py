@@ -1,6 +1,11 @@
+import os
+
 from fastapi import FastAPI
+from sqlalchemy.orm import Session
 from . import models      
-from .database import Base, engine
+from .database import Base, engine, SessionLocal
+from . import crud, schemas
+from .auth import hash_password
 from .routers import students, auth, marks, dashboard
 from .routers import attendance
 Base.metadata.create_all(bind=engine)
@@ -12,7 +17,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5174"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -23,6 +33,29 @@ app.include_router(auth.router)
 app.include_router(attendance.router)
 app.include_router(marks.router)
 app.include_router(dashboard.router)
+
+
+def seed_admin_user() -> None:
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@school.com")
+    admin_password = os.getenv("ADMIN_PASSWORD", "Admin@12345")
+    admin_name = os.getenv("ADMIN_NAME", "Registrar Admin")
+
+    db: Session = SessionLocal()
+    try:
+        existing_admin = crud.get_user_by_email(db, admin_email)
+        if existing_admin is None:
+            admin_user = schemas.UserCreate(
+                name=admin_name,
+                email=admin_email,
+                password=admin_password,
+                role="admin",
+            )
+            crud.create_user(db, admin_user, hash_password(admin_password))
+    finally:
+        db.close()
+
+
+seed_admin_user()
 
 
 @app.get("/")

@@ -1,7 +1,12 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-DATABASE_URL="postgresql://postgres:rot@localhost:5432/student_db"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://postgres:rot@localhost:5432/student_db",
+)
 
 #database connection
 #the engine is sqlalchemy's interface to database 
@@ -26,7 +31,3 @@ def get_db()->Generator:
 
 class Base(DeclarativeBase):
     pass
-
-
-with engine.connect() as conn:
-    print("Database Connected Successfully!")

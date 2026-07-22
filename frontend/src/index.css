@@ -3,36 +3,36 @@
 @tailwind utilities;
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #ffffff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: #4b5563;
+  --text-h: #08101f;
+  --bg: #fbfcfe;
+  --border: #e5eaf2;
+  --code-bg: #f3f6fb;
+  --accent: #275efe;
+  --accent-bg: rgba(39, 94, 254, 0.1);
+  --accent-border: rgba(39, 94, 254, 0.35);
+  --social-bg: rgba(255, 255, 255, 0.8);
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+    rgba(15, 23, 42, 0.08) 0 10px 15px -3px,
+    rgba(15, 23, 42, 0.04) 0 4px 6px -2px;
+  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
   --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
+    --text: #a7b0bf;
+    --text-h: #f4f7fb;
+    --bg: #0b1020;
+    --border: #23314d;
+    --code-bg: #131b2e;
+    --accent: #78a1ff;
+    --accent-bg: rgba(120, 161, 255, 0.14);
+    --accent-border: rgba(120, 161, 255, 0.45);
+    --social-bg: rgba(22, 33, 58, 0.8);
     --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
+      rgba(0, 0, 0, 0.45) 0 10px 15px -3px,
       rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
   }
 
@@ -61,21 +61,23 @@ html {
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at top left, rgba(39, 94, 254, 0.05), transparent 30%),
+    radial-gradient(circle at top right, rgba(214, 139, 31, 0.06), transparent 26%),
+    var(--bg);
   color: var(--text);
   font-family: var(--sans);
 }
 
 body {
-  @apply bg-paper text-ink font-body;
+  @apply text-ink font-body;
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -117,6 +119,10 @@ h2 {
 
 p {
   margin: 0;
+}
+
+table {
+  border-collapse: collapse;
 }
 
 code,

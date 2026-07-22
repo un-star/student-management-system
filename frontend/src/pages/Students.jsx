@@ -31,6 +31,7 @@ export default function Students() {
   };
 
   useEffect(() => {
+    // Fetch the list once so the table is ready immediately.
     loadStudents();
   }, []);
 
@@ -46,7 +47,7 @@ export default function Students() {
   };
 
   const openEditForm = (student) => {
-    // Prefill the edit modal so updates do not wipe the existing student data.
+    // Reuse the same modal for edit mode by pre-filling the current row values.
     setForm({
       name: student.name,
       email: student.email,
@@ -60,7 +61,6 @@ export default function Students() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    // Backend expects the same email field on create and update, so send the full object.
     const payload = { ...form, age: Number(form.age) };
 
     try {
@@ -92,13 +92,13 @@ export default function Students() {
   };
 
   return (
-    <div className="flex">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-paper/60">
       <Sidebar />
-      <main className="flex-1 p-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
+      <main className="flex-1 p-4 sm:p-6 lg:p-10">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
+          <div className="max-w-xl">
             <h1 className="font-display text-3xl mb-1">Students</h1>
-            <p className="text-ink/50 text-sm">
+            <p className="text-ink/60 text-sm">
               {isAdmin
                 ? "Full access - add, edit, and remove records."
                 : "Read-only access."}
@@ -108,7 +108,7 @@ export default function Students() {
           {isAdmin && (
             <button
               onClick={openAddForm}
-              className="bg-brass text-ink font-medium px-4 py-2 rounded-md hover:brightness-95"
+              className="bg-brass text-ink font-semibold px-4 py-3 rounded-xl hover:brightness-95 shadow-sm"
             >
               + Add Student
             </button>
@@ -116,74 +116,76 @@ export default function Students() {
         </div>
 
         {notice && (
-          <div className="bg-success/10 text-success text-sm rounded-md px-3 py-2 mb-4">
+          <div className="bg-success/10 text-success text-sm rounded-xl px-3 py-3 mb-4 border border-success/15">
             {notice}
           </div>
         )}
         {error && (
-          <div className="bg-danger/10 text-danger text-sm rounded-md px-3 py-2 mb-4">
+          <div className="bg-danger/10 text-danger text-sm rounded-xl px-3 py-3 mb-4 border border-danger/15">
             {error}
           </div>
         )}
 
         {loading ? (
-          <p className="text-ink/50 text-sm">Loading students...</p>
+          <p className="text-ink/60 text-sm">Loading students...</p>
         ) : students.length === 0 ? (
-          <p className="text-ink/50 text-sm">
+          <p className="text-ink/60 text-sm">
             No students yet. {isAdmin && "Add the first one above."}
           </p>
         ) : (
-          <table className="w-full bg-white border border-ink/10 rounded-lg overflow-hidden text-sm">
-            <thead className="bg-paper text-ink/60 text-left">
-              <tr>
-                <th className="px-4 py-3 font-mono">ID</th>
-                <th className="px-4 py-3">Name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Age</th>
-                <th className="px-4 py-3">Course</th>
-                {isAdmin && <th className="px-4 py-3 text-right">Actions</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {students.map((s, i) => (
-                <tr
-                  key={s.id}
-                  className={i % 2 === 0 ? "bg-white" : "bg-paper/40"}
-                >
-                  <td className="px-4 py-3 font-mono text-ink/60">
-                    #{String(s.id).padStart(4, "0")}
-                  </td>
-                  <td className="px-4 py-3">{s.name}</td>
-                  <td className="px-4 py-3">{s.email}</td>
-                  <td className="px-4 py-3">{s.age}</td>
-                  <td className="px-4 py-3">{s.course}</td>
-                  {isAdmin && (
-                    <td className="px-4 py-3 text-right space-x-3">
-                      <button
-                        onClick={() => openEditForm(s)}
-                        className="text-ink/70 hover:text-ink font-medium"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(s.id)}
-                        className="text-danger hover:text-danger/80 font-medium"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  )}
+          <div className="overflow-x-auto rounded-2xl border border-ink/10 bg-surface shadow-sm">
+            <table className="min-w-[760px] w-full text-sm">
+              <thead className="bg-paper/90 text-ink/70 text-left">
+                <tr>
+                  <th className="px-4 py-3 font-mono">ID</th>
+                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Age</th>
+                  <th className="px-4 py-3">Course</th>
+                  {isAdmin && <th className="px-4 py-3 text-right">Actions</th>}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {students.map((s, i) => (
+                  <tr
+                    key={s.id}
+                    className={i % 2 === 0 ? "bg-white" : "bg-paper/40"}
+                  >
+                    <td className="px-4 py-3 font-mono text-ink/60">
+                      #{String(s.id).padStart(4, "0")}
+                    </td>
+                    <td className="px-4 py-3">{s.name}</td>
+                    <td className="px-4 py-3">{s.email}</td>
+                    <td className="px-4 py-3">{s.age}</td>
+                    <td className="px-4 py-3">{s.course}</td>
+                    {isAdmin && (
+                      <td className="px-4 py-3 text-right space-x-3">
+                        <button
+                          onClick={() => openEditForm(s)}
+                          className="text-ink/70 hover:text-ink font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(s.id)}
+                          className="text-danger hover:text-danger/80 font-medium"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         {showForm && (
-          <div className="fixed inset-0 bg-ink/40 flex items-center justify-center">
+          <div className="fixed inset-0 bg-ink/50 backdrop-blur-sm p-4 flex items-center justify-center">
             <form
               onSubmit={handleSubmit}
-              className="bg-white rounded-lg p-8 w-full max-w-sm shadow-lg"
+              className="bg-surface rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-xl border border-ink/10"
             >
               <h2 className="font-display text-2xl mb-6">
                 {editingId ? "Edit Student" : "Add Student"}
@@ -194,17 +196,17 @@ export default function Students() {
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border border-ink/20 rounded-md px-3 py-2 mb-4"
+                className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-4 bg-white"
               />
 
               <label className="block text-sm font-medium mb-1">Email</label>
               <input
                 type="email"
                 required
-                // This field was missing before; the backend rejects student rows without email.
+                // The backend uses email as the unique identifier for each student.
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full border border-ink/20 rounded-md px-3 py-2 mb-4"
+                className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-4 bg-white"
               />
 
               <label className="block text-sm font-medium mb-1">Age</label>
@@ -213,7 +215,7 @@ export default function Students() {
                 required
                 value={form.age}
                 onChange={(e) => setForm({ ...form, age: e.target.value })}
-                className="w-full border border-ink/20 rounded-md px-3 py-2 mb-4"
+                className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-4 bg-white"
               />
 
               <label className="block text-sm font-medium mb-1">Course</label>
@@ -221,20 +223,20 @@ export default function Students() {
                 required
                 value={form.course}
                 onChange={(e) => setForm({ ...form, course: e.target.value })}
-                className="w-full border border-ink/20 rounded-md px-3 py-2 mb-6"
+                className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-6 bg-white"
               />
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-col sm:flex-row justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="px-4 py-2 rounded-md text-ink/60 hover:text-ink"
+                  className="px-4 py-3 rounded-xl text-ink/70 hover:text-ink border border-ink/10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-ink text-paper px-4 py-2 rounded-md font-medium hover:bg-inklight"
+                  className="bg-info text-white px-4 py-3 rounded-xl font-semibold hover:brightness-95"
                 >
                   {editingId ? "Save changes" : "Add student"}
                 </button>

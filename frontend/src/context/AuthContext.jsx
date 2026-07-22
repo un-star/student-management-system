@@ -4,7 +4,7 @@ import { AuthContext } from "./auth-context";
 import { decodeToken } from "../utils/jwt";
 
 export function AuthProvider({ children }) {
-  // Hydrate auth state from localStorage so refreshes do not kick users out.
+  // Keep auth in localStorage so a refresh does not force a new login.
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [user, setUser] = useState(() => {
     const storedToken = localStorage.getItem("token");
@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
   });
 
   const login = async (email, password) => {
+    // OAuth2PasswordRequestForm expects "username", even when the app uses email.
     const form = new URLSearchParams();
     form.append("username", email);
     form.append("password", password);
@@ -20,7 +21,6 @@ export function AuthProvider({ children }) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
 
-    // Store the JWT and derive the current user from its payload instead of calling /auth/me.
     const newToken = res.data.access_token;
     localStorage.setItem("token", newToken);
     setToken(newToken);
@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    // Clear both the token and derived user state so protected routes redirect cleanly.
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);

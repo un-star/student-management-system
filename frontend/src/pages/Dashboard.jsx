@@ -8,6 +8,7 @@ export default function Dashboard() {
   const { user } = useAuth();
 
   useEffect(() => {
+    // Load the dashboard summary once after the page mounts.
     api.get("/dashboard/stats").then((res) => setStats(res.data));
   }, []);
 
@@ -19,23 +20,23 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-paper/60">
       <Sidebar />
-      <main className="flex-1 p-10">
+      <main className="flex-1 p-4 sm:p-6 lg:p-10">
         <h1 className="font-display text-3xl mb-1">
           Welcome{user?.name ? `, ${user.name}` : ""}
         </h1>
-        <p className="text-ink/50 mb-8">Here's today's overview.</p>
+        <p className="text-ink/60 mb-8">Here's today's overview.</p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {cards.map((c) => (
             <div
               key={c.label}
-              className="bg-white border border-ink/10 rounded-lg p-6 shadow-sm"
+              className="bg-surface border border-ink/10 rounded-2xl p-5 sm:p-6 shadow-sm"
             >
-              <p className="text-ink/50 text-sm mb-1">{c.label}</p>
-              <p className="font-display text-3xl font-mono">
-                {c.value === undefined || c.value === null ? "…" : c.value}
+              <p className="text-ink/60 text-sm mb-1">{c.label}</p>
+              <p className="font-display text-3xl font-mono text-ink">
+                {c.value === undefined || c.value === null ? "..." : c.value}
               </p>
             </div>
           ))}

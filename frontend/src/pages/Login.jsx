@@ -14,12 +14,14 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       await login(email, password);
       navigate("/dashboard");
     } catch (err) {
       setError(
-        err.response?.data?.detail || "Incorrect email or password."
+        err.response?.data?.detail ||
+          "Cannot reach the registrar server. Check that the backend is running and the API URL is correct."
       );
     } finally {
       setLoading(false);
@@ -27,16 +29,21 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-paper">
+    <div className="min-h-screen px-4 py-8 flex items-center justify-center bg-[radial-gradient(circle_at_top_left,_rgba(39,94,254,0.14),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(214,139,31,0.16),_transparent_30%),var(--bg)]">
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-sm border border-ink/10 rounded-lg p-10 w-full max-w-sm"
+        className="bg-surface/95 shadow-xl border border-ink/10 rounded-2xl p-6 sm:p-8 w-full max-w-md backdrop-blur"
       >
-        <h1 className="font-display text-3xl mb-1">Sign in</h1>
-        <p className="text-ink/50 text-sm mb-8">Access the student registrar</p>
+        <div className="inline-flex items-center rounded-full bg-info/10 px-3 py-1 text-info text-xs font-semibold mb-4">
+          Registrar Portal
+        </div>
+        <h1 className="font-display text-3xl mb-2">Sign in</h1>
+        <p className="text-ink/60 text-sm mb-8">
+          Access the student registrar dashboard.
+        </p>
 
         {error && (
-          <div className="bg-danger/10 text-danger text-sm rounded-md px-3 py-2 mb-4">
+          <div className="bg-danger/10 text-danger text-sm rounded-xl px-3 py-3 mb-4 border border-danger/15">
             {error}
           </div>
         )}
@@ -47,7 +54,7 @@ export default function Login() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border border-ink/20 rounded-md px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-brass"
+          className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-4 bg-white focus:outline-none focus:ring-2 focus:ring-info"
         />
 
         <label className="block text-sm font-medium mb-1">Password</label>
@@ -56,13 +63,13 @@ export default function Login() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-ink/20 rounded-md px-3 py-2 mb-6 focus:outline-none focus:ring-2 focus:ring-brass"
+          className="w-full border border-ink/20 rounded-xl px-3 py-3 mb-6 bg-white focus:outline-none focus:ring-2 focus:ring-info"
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-ink text-paper rounded-md py-2 font-medium hover:bg-inklight transition-colors disabled:opacity-50"
+          className="w-full bg-info text-white rounded-xl py-3 font-semibold hover:brightness-95 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Signing in..." : "Sign in"}
         </button>

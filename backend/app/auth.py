@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import os
 
 import bcrypt
 from fastapi import Depends, HTTPException, status
@@ -11,7 +12,7 @@ from . import models
 
 # --- Config ---
 # In production, load SECRET_KEY from an environment variable, never hardcode it.
-SECRET_KEY = "51e94b31d1d7f7fce19dc36333f2835b32198117934dc0689f63fa8d37984b24"
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

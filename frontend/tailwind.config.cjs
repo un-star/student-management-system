@@ -5,12 +5,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: "#101A2E",
-        inklight: "#1C2B47",
-        paper: "#EEF1F6",
-        brass: "#C99A3E",
-        success: "#2F7D5B",
-        danger: "#B3452C",
+        ink: "#0B1020",
+        inklight: "#16213A",
+        paper: "#F8FAFC",
+        surface: "#FFFFFF",
+        brass: "#D68B1F",
+        success: "#1F7A57",
+        danger: "#C6452D",
+        info: "#275EFE",
       },
       fontFamily: {
         display: ["Fraunces", "serif"],
